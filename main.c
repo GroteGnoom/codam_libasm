@@ -2,6 +2,8 @@
 #include "libasm.h"
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 void test_strlen(char *str) {
 	assert(ft_strlen(str) == strlen(str));
@@ -34,6 +36,19 @@ void test_strcmp(char *s1, char *s2) {
 	assert(sign(ft_strcmp(s1, s2)) == sign(strcmp(s1, s2)));
 }
 
+void test_write(char *str) {
+	//write(1, str, strlen(str));
+	ft_write(1, str, strlen(str));
+}
+
+void test_read() {
+	char buffer[1001];
+	int fd = open("main.c", O_RDONLY);
+	int n = ft_read(fd, buffer, 1000);
+	buffer[n] = 0;
+	ft_write(1, buffer, ft_strlen(buffer));
+}
+
 int main() {
 	test_strlen("");
 	test_strlen("banaan");
@@ -44,4 +59,8 @@ int main() {
 	test_strcmp("bla", "");
 	test_strcmp("bla", "ble");
 	test_strcmp("ble", "bla");
+	test_write("bla");
+	test_write("");
+	test_write("asdfasdf\n\nasdfasdf");
+	test_read();
 }
