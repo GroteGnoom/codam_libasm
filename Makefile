@@ -1,25 +1,20 @@
 NAME = libasm.a
-SRC = ft_strlen.s
+SRC = ft_strlen.s ft_strcpy.s ft_strcmp.s
 TEST = main.c
 INC = libasm.h
 
-ifdef DEBUG
-	CC=clang++
-	ASAN_OPTIONS='detect_leaks=1'
-	CFLAGS = -Wall -Wextra -fsanitize=address -DDEBUG=1 -g -std=c++98 -pedantic -Wshadow
-else
-	CC=gcc
-	CFLAGS = -Wall -Wextra -Werror
-endif
+CC=clang
+CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address -O0
 
 AFLAGS = -fmacho64
 
-OBJ = $(SRC:.s=.o)
+LIBOBJ = $(SRC:.s=.o)
+OBJ = $(LIBOBJ) main.o
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar r $@ $(OBJ)
+$(NAME): $(LIBOBJ)
+	ar r $@ $(LIBOBJ)
 
 %.o: %.s $(INC)
 	nasm $(AFLAGS) $<
@@ -29,7 +24,7 @@ main.o: main.c
 
 test: $(NAME) main.o
 	echo $(NAME)
-	gcc $^ -o test
+	$(CC) $(CFLAGS) $^ -o test
 	./test
 
 clean:
@@ -40,4 +35,6 @@ fclean: clean
 
 re: fclean all
 .PHONY: all clean fclean re
+
+.PRECIOUS: test
 

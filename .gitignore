@@ -1,3 +1,4 @@
 libasm.a
 test
 *.o
+*.swp

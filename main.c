@@ -1,7 +1,47 @@
 #include <assert.h>
 #include "libasm.h"
+#include <string.h>
+#include <stdio.h>
+
+void test_strlen(char *str) {
+	assert(ft_strlen(str) == strlen(str));
+}
+
+void test_strcpy(char *str) {
+	char buf[100] = "12345678910aaaaaaaaaaaa";
+	char *ret = ft_strcpy(buf, str);
+	assert (ret == buf);
+	while (*ret) {
+		assert(*ret = *str);
+		ret++;
+		str++;
+	}
+}
+
+int sign(int a) {
+	if (a < 0) {
+		return -1;
+	}
+	if (a > 0) {
+		return 1;
+	}
+	return 0;
+}
+
+void test_strcmp(char *s1, char *s2) {
+	printf("%d\n", ft_strcmp(s1, s2));
+	printf("%d\n", strcmp(s1, s2));
+	assert(sign(ft_strcmp(s1, s2)) == sign(strcmp(s1, s2)));
+}
+
 int main() {
-	assert(ft_strlen("") == 0);
-	assert(ft_strlen("banaan") == 6);
-	assert(ft_strlen("banaan\n\n") == 8);
+	test_strlen("");
+	test_strlen("banaan");
+	test_strcpy("banaan");
+	test_strcpy("");
+	test_strcmp("", "");
+	test_strcmp("", "bla");
+	test_strcmp("bla", "");
+	test_strcmp("bla", "ble");
+	test_strcmp("ble", "bla");
 }
