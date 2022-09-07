@@ -1,5 +1,5 @@
 NAME = libasm.a
-SRC = ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s ft_read.s 
+SRC = ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s ft_read.s ft_strdup.s
 TEST = main.c
 INC = libasm.h
 
@@ -34,7 +34,7 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test
 
 .PRECIOUS: test
 

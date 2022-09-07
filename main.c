@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 void test_strlen(char *str) {
 	assert(ft_strlen(str) == strlen(str));
@@ -49,7 +50,15 @@ void test_read() {
 	ft_write(1, buffer, ft_strlen(buffer));
 }
 
+void test_strdup(char *str) {
+	char *dup = ft_strdup(str);
+	assert(!ft_strcmp(dup, str));
+	printf("%s\n", dup);
+	free(dup);
+}
+
 int main() {
+	setbuf(stdout, NULL);
 	test_strlen("");
 	test_strlen("banaan");
 	test_strcpy("banaan");
@@ -63,4 +72,7 @@ int main() {
 	test_write("");
 	test_write("asdfasdf\n\nasdfasdf");
 	test_read();
+	test_strdup("");
+	test_strdup("bla");
+	test_strdup("asdfasdf\n\nasdfasdf");
 }
