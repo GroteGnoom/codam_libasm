@@ -32,28 +32,47 @@ int sign(int a) {
 }
 
 void test_strcmp(char *s1, char *s2) {
-	printf("%d\n", ft_strcmp(s1, s2));
-	printf("%d\n", strcmp(s1, s2));
+	//printf("%d\n", ft_strcmp(s1, s2));
+	//printf("%d\n", strcmp(s1, s2));
 	assert(sign(ft_strcmp(s1, s2)) == sign(strcmp(s1, s2)));
 }
 
 void test_write(char *str) {
-	//write(1, str, strlen(str));
-	ft_write(1, str, strlen(str));
+	int fd1 = open("test1", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+	int fd2 = open("test2", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+	ssize_t a = write(fd1, str, strlen(str));
+	ssize_t b = ft_write(fd2, str, strlen(str));
+	close(fd1);
+	close(fd2);
+	assert(a==b);
+	fd1 = open("test1", O_RDONLY);
+	fd2 = open("test2", O_RDONLY);
+	char buffer1[10001];
+	char buffer2[10001];
+	int n1 = read(fd1, buffer1, 10000);
+	int n2 = read(fd2, buffer2, 10000);
+	buffer1[n1] = 0;
+	buffer2[n2] = 0;
+	assert(!strcmp(buffer1, buffer2));
 }
 
 void test_read() {
-	char buffer[1001];
+	char buffer1[10001];
+	char buffer2[10001];
 	int fd = open("main.c", O_RDONLY);
-	int n = ft_read(fd, buffer, 1000);
-	buffer[n] = 0;
-	ft_write(1, buffer, ft_strlen(buffer));
+	int n = ft_read(fd, buffer1, 10000);
+	close(fd);
+	fd = open("main.c", O_RDONLY);
+	int n2 = read(fd, buffer2, 10000);
+	buffer1[n] = 0;
+	buffer2[n2] = 0;
+	assert(!strcmp(buffer1, buffer2));
 }
 
 void test_strdup(char *str) {
 	char *dup = ft_strdup(str);
 	assert(!ft_strcmp(dup, str));
-	printf("%s\n", dup);
+	//printf("%s\n", dup);
 	free(dup);
 }
 
