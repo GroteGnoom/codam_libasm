@@ -5,10 +5,11 @@ section   .text
 
 %ifidn __OUTPUT_FORMAT__, macho64
     ; /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/sys/syscall.h
-    ; add 0x02000000 to it
+    ; add 0x02000000 to the x86 syscall
     %define READ_SYSCALL 0x02000003
 %else
-    %define READ_SYSCALL 0x3
+    ; x86_64 uses 0 for read
+    %define READ_SYSCALL 0x0
 %endif
 
 PREFIX ft_read:

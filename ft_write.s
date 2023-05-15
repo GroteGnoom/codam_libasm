@@ -5,13 +5,15 @@ section   .text
 
 %ifidn __OUTPUT_FORMAT__, macho64
     ; /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/sys/syscall.h
-    ; add 0x02000000 to it
+    ; add 0x02000000 to the x86 syscall number, which was 4
     %define WRITE_SYSCALL 0x02000004
 %else
-    %define WRITE_SYSCALL 0x4
+    ; for 64 the write syscall is 1
+    %define WRITE_SYSCALL 0x1
 %endif
 
 PREFIX ft_write:
+
 ; rdi is the first argument, rax should have the return value
 ; rsi is the second argument
 ; rdx, rcx, r8, r9
