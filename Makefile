@@ -5,9 +5,16 @@ INC = libasm.h
 
 CC=gcc
 #CFLAGS = -g -Wall -Wextra -Werror -O0
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address -O0
+CFLAGS := -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined -O0
 
-AFLAGS = -fmacho64
+OS := $(shell uname)
+
+ifeq ($(OS), Linux)
+	AFLAGS = -felf64
+	CFLAGS := $(CFLAGS) -no-pie
+else
+	AFLAGS = -fmacho64
+endif
 
 LIBOBJ = $(SRC:.s=.o)
 OBJ = $(LIBOBJ) main.o
@@ -23,7 +30,7 @@ $(NAME): $(LIBOBJ)
 main.o: main.c
 	$(CC) $(CFLAGS) main.c -c -o main.o
 
-test: $(NAME) main.o
+test: main.o $(NAME)
 	echo $(NAME)
 	$(CC) $(CFLAGS) $^ -o test
 	./test

@@ -1,8 +1,9 @@
-global    _ft_strcpy
+%include "prefix.asm"
+global    PREFIX ft_strcpy
 
 section   .text
 
-_ft_strcpy:
+PREFIX ft_strcpy:
 ; rdi is the first argument, rax should have the return value
 ; rsi is the second argument
 ; https://soliduscode.com/nasm-x64-c-calling-convention/

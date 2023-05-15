@@ -1,8 +1,9 @@
-global    _ft_strlen
+%include "prefix.asm"
+global    PREFIX ft_strlen
 
 section   .text
 
-_ft_strlen:
+PREFIX ft_strlen:
 ; rdi is the first argument, rax should have the return value
 ; https://soliduscode.com/nasm-x64-c-calling-convention/
 

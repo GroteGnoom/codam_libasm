@@ -1,17 +1,24 @@
-global    _ft_read
+%include "prefix.asm"
+global    PREFIX ft_read
 
 section   .text
 
-_ft_read:
+%ifidn __OUTPUT_FORMAT__, macho64
+    ; /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/sys/syscall.h
+    ; add 0x02000000 to it
+    %define READ_SYSCALL 0x02000003
+%else
+    %define READ_SYSCALL 0x3
+%endif
+
+PREFIX ft_read:
 ; rdi is the first argument, rax should have the return value
 ; rsi is the second argument
 ; rdx, rcx, r8, r9
 ; https://soliduscode.com/nasm-x64-c-calling-convention/
 ; dl is the lowest byte of rdx
-; /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/sys/syscall.h
-; add 0x02000000 to it
 
-mov		rax, 0x02000003 
+mov		rax, READ_SYSCALL 
 syscall
 ret
 

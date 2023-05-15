@@ -1,8 +1,9 @@
-global    _ft_strcmp
+%include "prefix.asm"
+global    PREFIX ft_strcmp
 
 section   .text
 
-_ft_strcmp:
+PREFIX ft_strcmp:
 ; rdi is the first argument, rax should have the return value
 ; rsi is the second argument
 ; https://soliduscode.com/nasm-x64-c-calling-convention/

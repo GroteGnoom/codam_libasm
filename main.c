@@ -15,7 +15,7 @@ void test_strcpy(char *str) {
 	char *ret = ft_strcpy(buf, str);
 	assert (ret == buf);
 	while (*ret) {
-		assert(*ret = *str);
+		assert(*ret == *str);
 		ret++;
 		str++;
 	}
@@ -40,10 +40,12 @@ void test_strcmp(char *s1, char *s2) {
 void test_write(char *str) {
 	int fd1 = open("test1", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 	int fd2 = open("test2", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+	printf("%d %d\n", fd1, fd2);
 	ssize_t a = write(fd1, str, strlen(str));
 	ssize_t b = ft_write(fd2, str, strlen(str));
 	close(fd1);
 	close(fd2);
+	printf("%ld %ld\n", a, b);
 	assert(a==b);
 	fd1 = open("test1", O_RDONLY);
 	fd2 = open("test2", O_RDONLY);
