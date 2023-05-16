@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <errno.h>
 
 void test_strlen(char *str) {
 	assert(ft_strlen(str) == strlen(str));
@@ -56,6 +57,14 @@ void test_write(char *str) {
 	buffer1[n1] = 0;
 	buffer2[n2] = 0;
 	assert(!strcmp(buffer1, buffer2));
+
+	a = write(-1, str, strlen(str));
+	int store_errno = errno;
+	b = ft_write(-1, str, strlen(str));
+	assert(a==b);
+	assert(a==-1);
+	assert(errno==store_errno);
+	assert(errno==EBADF);
 }
 
 void test_read() {
@@ -69,6 +78,12 @@ void test_read() {
 	buffer1[n] = 0;
 	buffer2[n2] = 0;
 	assert(!strcmp(buffer1, buffer2));
+
+	n2 = read(fd, buffer2, 10000);
+	assert(n2 == 0);
+	n2 = read(-1, buffer2, 10000);
+	assert(n2 == -1);
+	assert(errno == EBADF);
 }
 
 void test_strdup(char *str) {
@@ -82,17 +97,32 @@ int main() {
 	setbuf(stdout, NULL);
 	test_strlen("");
 	test_strlen("banaan");
+	test_strlen("b");
+	test_strlen("b l a a !");
+	test_strlen("b\n\n l\n a a !");
+	test_strlen("   ");
+
 	test_strcpy("banaan");
+	test_strcpy("banaan\n\nasdf\nasdf");
 	test_strcpy("");
+
 	test_strcmp("", "");
 	test_strcmp("", "bla");
 	test_strcmp("bla", "");
 	test_strcmp("bla", "ble");
 	test_strcmp("ble", "bla");
+	test_strcmp("bla", "blaa");
+	test_strcmp("blaa", "bla");
+	test_strcmp("blA", "bla");
+	test_strcmp("blA", "blA");
+	test_strcmp("bla\200", "bla");
+
 	test_write("bla");
 	test_write("");
 	test_write("asdfasdf\n\nasdfasdf");
+
 	test_read();
+
 	test_strdup("");
 	test_strdup("bla");
 	test_strdup("asdfasdf\n\nasdfasdf");

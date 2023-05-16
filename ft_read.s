@@ -7,10 +7,14 @@ section   .text
     ; /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/sys/syscall.h
     ; add 0x02000000 to the x86 syscall
     %define READ_SYSCALL 0x02000003
+    %define ERRNO_LOCATION ___error
 %else
     ; x86_64 uses 0 for read
     %define READ_SYSCALL 0x0
+    %define ERRNO_LOCATION __errno_location
 %endif
+
+extern ERRNO_LOCATION
 
 PREFIX ft_read:
 ; rdi is the first argument, rax should have the return value
@@ -21,5 +25,18 @@ PREFIX ft_read:
 
 mov		rax, READ_SYSCALL 
 syscall
+cmp rax, -1 ; check if there was an error
+jle error
+ret
+
+error:
+
+push rax
+call ERRNO_LOCATION
+; the errno location is now in rax
+pop rdi
+neg rdi
+mov [rax], rdi ; set errno to negation of error
+mov rax, -1
 ret
 
