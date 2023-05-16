@@ -4,8 +4,10 @@ TEST = main.c
 INC = libasm.h
 
 CC=gcc
-#CFLAGS = -g -Wall -Wextra -Werror -O0
-CFLAGS := -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined -O0
+CFLAGS := -Wall -Wextra -Werror
+ifdef DEBUG
+	CFLAGS := $(CFLAGS) -g -fsanitize=address -fsanitize=undefined
+endif
 
 OS := $(shell uname)
 
