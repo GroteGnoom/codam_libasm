@@ -39,8 +39,8 @@ void test_strcmp(char *s1, char *s2) {
 }
 
 void test_write(char *str) {
-	int fd1 = open("test1", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
-	int fd2 = open("test2", O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+	int fd1 = open("test1", O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
+	int fd2 = open("test2", O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
 	ssize_t a = write(fd1, str, strlen(str));
 	ssize_t b = ft_write(fd2, str, strlen(str));
 	close(fd1);
@@ -77,9 +77,9 @@ void test_read() {
 	buffer2[n2] = 0;
 	assert(!strcmp(buffer1, buffer2));
 
-	n2 = read(fd, buffer2, 10000);
+	n2 = ft_read(fd, buffer2, 10000);
 	assert(n2 == 0);
-	n2 = read(-1, buffer2, 10000);
+	n2 = ft_read(-1, buffer2, 10000);
 	assert(n2 == -1);
 	assert(errno == EBADF);
 }
@@ -92,6 +92,7 @@ void test_strdup(char *str) {
 }
 
 int main() {
+	setbuf(stderr, NULL);
 	test_strlen("");
 	test_strlen("banaan");
 	test_strlen("b");

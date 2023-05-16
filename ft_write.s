@@ -1,5 +1,5 @@
 %include "prefix.asm"
-global    PREFIX ft_write
+global    PREFIX %+ ft_write
 
 section   .text
 
@@ -16,7 +16,7 @@ section   .text
 
 extern ERRNO_LOCATION
 
-PREFIX ft_write:
+PREFIX %+ ft_write:
 
     ; rdi is the first argument, rax should have the return value
 ; rsi is the second argument
@@ -26,17 +26,22 @@ PREFIX ft_write:
 
 mov		rax, WRITE_SYSCALL 
 syscall
+
+%ifidn __OUTPUT_FORMAT__, macho64
+jb mac_error ; jump if carry flag is set 
+%else
 cmp rax, -1 ; check if there was an error
-jle error
+jle linux_error
+%endif
 ret
 
-error:
-
+linux_error:
+neg rax
+mac_error:
 push rax
 call ERRNO_LOCATION
 ; the errno location is now in rax
 pop rdi
-neg rdi
 mov [rax], rdi ; set errno to negation of error
 mov rax, -1
 ret
